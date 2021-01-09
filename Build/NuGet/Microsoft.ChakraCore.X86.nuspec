@@ -24,6 +24,6 @@
 
     <file src="Microsoft.ChakraCore.X86.props" target="build\netstandard1.0"/>
     
-    <file src="..\VcBuild\bin\x86_release\ChakraCore.dll" target="runtimes\win7-x86\native\ChakraCore.dll" />
+    <file src="..\VcBuild\bin\x86_release\ChakraCore.dll" target="runtimes\win-x86\native\ChakraCore.dll" />
   </files>
 </package>
