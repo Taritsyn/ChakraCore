@@ -11,7 +11,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>False</Visible>
     </Content>
-    <Content Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-arm\native\*" Condition=" '$(Platform)' == 'AnyCPU' ">
+    <Content Include="$(MSBuildThisFileDirectory)..\runtimes\win-arm\native\*" Condition=" '$(Platform)' == 'AnyCPU' ">
       <Link>arm\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>False</Visible>
