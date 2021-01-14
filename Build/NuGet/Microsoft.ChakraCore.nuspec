@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
-  <metadata minClientVersion="3.4">
+  <metadata>
     <id>Microsoft.ChakraCore</id>
     <!-- Note: actual version number is overridden by the NuGet package creation command. -->
     <version>$version$</version>
