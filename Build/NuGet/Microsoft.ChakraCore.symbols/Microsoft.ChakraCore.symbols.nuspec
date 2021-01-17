@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
-    <id>Microsoft.ChakraCore.X64</id>
+    <id>Microsoft.ChakraCore.symbols</id>
     <!-- Note: actual version number is overridden by the NuGet package creation command. -->
     <version>$version$</version>
     <authors>Microsoft</authors>
@@ -17,9 +17,11 @@
     <tags>Chakra,ChakraCore,javascript,js,ecmascript,compiler,platform,oss,opensource,native</tags>
   </metadata>
   <files>
-    <file src="Microsoft.ChakraCore.X64.props" target="build" />
+    <file src="Microsoft.ChakraCore.symbols.props" target="build" />
 
-    <file src="../../VcBuild/bin/x64_release/ChakraCore.dll" target="runtimes/win-x64/native/ChakraCore.dll" />
+    <file src="../../VcBuild/bin/x86_release/ChakraCore.pdb" target="runtimes/win-x86/native/ChakraCore.pdb" />
+    <file src="../../VcBuild/bin/x64_release/ChakraCore.pdb" target="runtimes/win-x64/native/ChakraCore.pdb" />
+    <file src="../../VcBuild/bin/arm_release/ChakraCore.pdb" target="runtimes/win-arm/native/ChakraCore.pdb" />
 
     <file src="../../../LICENSE.txt" target="LICENSE.txt" />
   </files>
