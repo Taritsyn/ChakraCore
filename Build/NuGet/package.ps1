@@ -3,11 +3,12 @@
 # Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
 #-------------------------------------------------------------------------------------------------------
 
-$root = (split-path -parent $MyInvocation.MyCommand.Definition) + '/..'
+$root = (Split-Path -Parent $MyInvocation.MyCommand.Definition) + '/..'
 
 $packageRoot = "$root/NuGet"
 $packageVersionFile = "$packageRoot/.pack-version"
 $packageArtifacts = "$packageRoot/Artifacts"
+$packageNames = "Microsoft.ChakraCore.X86", "Microsoft.ChakraCore.X64", "Microsoft.ChakraCore.ARM", "Microsoft.ChakraCore", "Microsoft.ChakraCore.Symbols", "Microsoft.ChakraCore.vc140"
 $targetNugetExe = "$packageRoot/nuget.exe"
 
 If (Test-Path $packageArtifacts)
@@ -25,10 +26,15 @@ If (!(Test-Path $targetNugetExe))
     Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
 }
 
-$versionStr = (Get-Content $packageVersionFile) 
+$versionStr = (Get-Content $packageVersionFile)
 
-# Create new packages for any nuspec files that exist in this directory.
-Foreach ($nuspec in $(Get-Item $packageRoot/*.nuspec))
+ForEach ($packageName in $packageNames)
 {
-    & $targetNugetExe pack $nuspec -outputdirectory $packageArtifacts -properties version=$versionStr
+    $nuspec = "$packageRoot/$packageName/$packageName.nuspec"
+
+    If (Test-Path $nuspec)
+    {
+        # Create new package for current nuspec file.
+        & $targetNugetExe pack $nuspec -OutputDirectory $packageArtifacts -Properties version=$versionStr
+    }
 }
