@@ -8,7 +8,7 @@ $root = (Split-Path -Parent $MyInvocation.MyCommand.Definition) + '/..'
 $packageRoot = "$root/NuGet"
 $packageVersionFile = "$packageRoot/.pack-version"
 $packageArtifacts = "$packageRoot/Artifacts"
-$packageNames = "Microsoft.ChakraCore.X86", "Microsoft.ChakraCore.X64", "Microsoft.ChakraCore.ARM", "Microsoft.ChakraCore", "Microsoft.ChakraCore.Symbols", "Microsoft.ChakraCore.vc140"
+$packageNames = "Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64", "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore", "Microsoft.ChakraCore.symbols", "Microsoft.ChakraCore.vc140"
 $targetNugetExe = "$packageRoot/nuget.exe"
 
 If (Test-Path $packageArtifacts)
