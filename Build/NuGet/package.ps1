@@ -8,8 +8,34 @@ $root = (Split-Path -Parent $MyInvocation.MyCommand.Definition) + '/..'
 $packageRoot = "$root/NuGet"
 $packageVersionFile = "$packageRoot/.pack-version"
 $packageArtifacts = "$packageRoot/Artifacts"
-$packageNames = "Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64", "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore", "Microsoft.ChakraCore.symbols", "Microsoft.ChakraCore.vc140"
+$packageNames = "Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64", "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore", "Microsoft.ChakraCore.vc140"
 $targetNugetExe = "$packageRoot/nuget.exe"
+
+Function Create-NuGetPackage
+{
+    Param
+    (
+        [Parameter(Mandatory)]
+        [string]$PackageName,
+
+        [Parameter(Mandatory)]
+        [string]$Version,
+
+        [switch]$Symbols
+    )
+
+    If ($Symbols)
+    {
+        $PackageName = "$PackageName.symbols"
+    }
+
+    $nuspec = "$packageRoot/$PackageName/$PackageName.nuspec"
+
+    If (Test-Path $nuspec)
+    {
+        & $targetNugetExe pack $nuspec -OutputDirectory $packageArtifacts -Properties version=$Version
+    }
+}
 
 If (Test-Path $packageArtifacts)
 {
@@ -30,11 +56,7 @@ $versionStr = (Get-Content $packageVersionFile)
 
 ForEach ($packageName in $packageNames)
 {
-    $nuspec = "$packageRoot/$packageName/$packageName.nuspec"
-
-    If (Test-Path $nuspec)
-    {
-        # Create new package for current nuspec file.
-        & $targetNugetExe pack $nuspec -OutputDirectory $packageArtifacts -Properties version=$versionStr
-    }
+    # Create primary and “symbol” packages.
+    Create-NuGetPackage $packageName $versionStr
+    Create-NuGetPackage $packageName $versionStr -Symbols
 }
