@@ -18,6 +18,8 @@
   </metadata>
   <files>
     <file src="Microsoft.ChakraCore.win-x86.symbols.props" target="build" />
+    <file src="Install.ps1" target="tools" />
+    <file src="Uninstall.ps1" target="tools" />
 
     <file src="../../VcBuild/bin/x86_release/ChakraCore.pdb" target="runtimes/win-x86/native/ChakraCore.pdb" />
 
