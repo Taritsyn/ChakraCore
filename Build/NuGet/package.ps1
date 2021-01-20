@@ -11,40 +11,25 @@ $packageArtifacts = "$packageRoot/Artifacts"
 $packageNames = "Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64", "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore", "Microsoft.ChakraCore.vc140"
 $targetNugetExe = "$packageRoot/nuget.exe"
 
-Function Create-NuGetPackage
-{
-    Param
-    (
-        [Parameter(Mandatory)]
-        [string]$PackageName,
-
-        [Parameter(Mandatory)]
-        [string]$Version,
-
-        [switch]$Symbols
-    )
-
-    If ($Symbols)
-    {
-        $PackageName = "$PackageName.symbols"
+# helper to create NuGet package
+function Create-NuGetPackage ([string]$packageName, [string]$version, [switch]$symbols) {
+    if ($symbols) {
+        $packageName = "$packageName.symbols"
     }
 
-    $nuspec = "$packageRoot/$PackageName/$PackageName.nuspec"
+    $nuspec = "$packageRoot/$packageName/$packageName.nuspec"
 
-    If (Test-Path $nuspec)
-    {
-        & $targetNugetExe pack $nuspec -OutputDirectory $packageArtifacts -Properties version=$Version
+    if (Test-Path $nuspec) {
+        & $targetNugetExe pack $nuspec -OutputDirectory $packageArtifacts -Properties version=$version
     }
 }
 
-If (Test-Path $packageArtifacts)
-{
+if (Test-Path $packageArtifacts) {
     # Delete any existing output.
     Remove-Item $packageArtifacts/*.nupkg
 }
 
-If (!(Test-Path $targetNugetExe))
-{
+if (!(Test-Path $targetNugetExe)) {
     $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
     Write-Host "NuGet.exe not found - downloading latest from $sourceNugetExe"
@@ -54,8 +39,7 @@ If (!(Test-Path $targetNugetExe))
 
 $versionStr = (Get-Content $packageVersionFile)
 
-ForEach ($packageName in $packageNames)
-{
+foreach ($packageName in $packageNames) {
     # Create primary and “symbol” packages.
     Create-NuGetPackage $packageName $versionStr
     Create-NuGetPackage $packageName $versionStr -Symbols
