@@ -67,6 +67,19 @@
     <file src="../../VcBuild/bin/arm_release/ch.exe" target="lib/native/v140/arm/debug/ch.exe" />
     <file src="../../VcBuild/bin/arm_release/ch.pdb" target="lib/native/v140/arm/debug/ch.pdb" />
 
+    <file src="../../VcBuild/bin/arm64_release/ChakraCore.dll" target="lib/native/v140/arm64/release/ChakraCore.dll" />
+    <file src="../../VcBuild/bin/arm64_release/ChakraCore.lib" target="lib/native/v140/arm64/release/ChakraCore.lib" />
+    <file src="../../VcBuild/bin/arm64_release/ChakraCore.pdb" target="lib/native/v140/arm64/release/ChakraCore.pdb" />
+    <file src="../../VcBuild/bin/arm64_release/ch.exe" target="lib/native/v140/arm64/release/ch.exe" />
+    <file src="../../VcBuild/bin/arm64_release/ch.pdb" target="lib/native/v140/arm64/release/ch.pdb" />
+
+    <!--Copying Release to Debug for now to save on build time-->
+    <file src="../../VcBuild/bin/arm64_release/ChakraCore.dll" target="lib/native/v140/arm64/debug/ChakraCore.dll" />
+    <file src="../../VcBuild/bin/arm64_release/ChakraCore.lib" target="lib/native/v140/arm64/debug/ChakraCore.lib" />
+    <file src="../../VcBuild/bin/arm64_release/ChakraCore.pdb" target="lib/native/v140/arm64/debug/ChakraCore.pdb" />
+    <file src="../../VcBuild/bin/arm64_release/ch.exe" target="lib/native/v140/arm64/debug/ch.exe" />
+    <file src="../../VcBuild/bin/arm64_release/ch.pdb" target="lib/native/v140/arm64/debug/ch.pdb" />
+
     <file src="../../../LICENSE.txt" target="LICENSE.txt" />
   </files>
 </package>
