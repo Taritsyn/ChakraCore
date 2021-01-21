@@ -3,9 +3,7 @@
 # Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
 #-------------------------------------------------------------------------------------------------------
 
-$root = (Split-Path -Parent $MyInvocation.MyCommand.Definition) + '/..'
-
-$packageRoot = "$root/NuGet"
+$packageRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition
 $packageVersionFile = "$packageRoot/.pack-version"
 $packageArtifacts = "$packageRoot/Artifacts"
 $packageNames = "Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64", "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore.win-arm64", "Microsoft.ChakraCore", "Microsoft.ChakraCore.vc140"
