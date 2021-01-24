@@ -1,16 +1,13 @@
 param($installPath, $toolsPath, $package, $project)
 
 if ($project.Type -eq "Web Site") {
-    $runtimeDirectoryPath = Join-Path $installPath "runtimes/win-arm/"
-    $projectDirectoryPath = $project.Properties.Item("FullPath").Value
-    $binDirectoryPath = Join-Path $projectDirectoryPath "bin"
-    $pdbFileName = "ChakraCore.pdb"
+    $projectDir = $project.Properties.Item("FullPath").Value
 
-    $pdbDestDirectoryPath = Join-Path $binDirectoryPath "arm"
-    if (!(Test-Path $pdbDestDirectoryPath)) {
-        New-Item -ItemType Directory -Force -Path $pdbDestDirectoryPath
+    $pdbDestDir = Join-Path $projectDir "bin/arm"
+    if (!(Test-Path $pdbDestDir)) {
+        New-Item -ItemType Directory -Force -Path $pdbDestDir
     }
 
-    $pdbSourceFilePath = Join-Path $runtimeDirectoryPath ("native/" + $pdbFileName)
-    Copy-Item $pdbSourceFilePath $pdbDestDirectoryPath -Force
+    $pdbSourceFile = Join-Path $installPath "runtimes/win-arm/native/ChakraCore.pdb"
+    Copy-Item $pdbSourceFile $pdbDestDir -Force
 }

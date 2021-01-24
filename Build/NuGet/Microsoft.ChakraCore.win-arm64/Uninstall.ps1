@@ -1,14 +1,10 @@
 param($installPath, $toolsPath, $package, $project)
 
 if ($project.Type -eq "Web Site") {
-    $projectDirectoryPath = $project.Properties.Item("FullPath").Value
-    $binDirectoryPath = Join-Path $projectDirectoryPath "bin"
-    $assemblyFileName = "ChakraCore.dll"
+    $projectDir = $project.Properties.Item("FullPath").Value
 
-    $assemblyDirectoryPath = Join-Path $binDirectoryPath "arm64"
-    $assemblyFilePath = Join-Path $assemblyDirectoryPath $assemblyFileName
-
-    if (Test-Path $assemblyFilePath) {
-        Remove-Item $assemblyFilePath -Force
+    $assemblyFile = Join-Path $projectDir "bin/arm64/ChakraCore.dll"
+    if (Test-Path $assemblyFile) {
+        Remove-Item $assemblyFile -Force
     }
 }
