@@ -4,41 +4,42 @@
 #-------------------------------------------------------------------------------------------------------
 
 $packageRoot = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$packageVersionFile = "$packageRoot/.pack-version"
-$packageArtifacts = "$packageRoot/Artifacts"
-$packageNames = "Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64", "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore.win-arm64", "Microsoft.ChakraCore", "Microsoft.ChakraCore.vc140"
-$targetNugetExe = "$packageRoot/nuget.exe"
+$packageArtifactsDir = Join-Path $packageRoot "Artifacts"
+$localNugetExe = Join-Path $packageRoot "nuget.exe"
 
 # helper to create NuGet package
-function Create-NuGetPackage ([string]$packageName, [string]$version, [switch]$symbols) {
-    if ($symbols) {
-        $packageName = "$packageName.symbols"
-    }
+function CreateNugetPackage ([string]$name, [string]$version, [switch]$symbols) {
+    $packageName = if ($symbols) { "$name.symbols" } else { $name }
+    $packageDir = Join-Path $packageRoot $packageName
 
-    $nuspec = "$packageRoot/$packageName/$packageName.nuspec"
+    if (Test-Path $packageDir) {
+        $packageNuspecFile = Join-Path $packageDir "$packageName.nuspec"
 
-    if (Test-Path $nuspec) {
-        & $targetNugetExe pack $nuspec -OutputDirectory $packageArtifacts -Properties version=$version
+        & $localNugetExe pack $packageNuspecFile -OutputDirectory $packageArtifactsDir -Properties version=$version
     }
 }
 
-if (Test-Path $packageArtifacts) {
+if (Test-Path $packageArtifactsDir) {
     # Delete any existing output.
-    Remove-Item $packageArtifacts/*.nupkg
+    Remove-Item "$packageArtifactsDir/*.nupkg"
 }
 
-if (!(Test-Path $targetNugetExe)) {
-    $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
+if (!(Test-Path $localNugetExe)) {
+    $nugetDistUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
-    Write-Host "NuGet.exe not found - downloading latest from $sourceNugetExe"
+    Write-Host "NuGet.exe not found - downloading latest from $nugetDistUrl"
 
-    Invoke-WebRequest $sourceNugetExe -OutFile $targetNugetExe
+    Invoke-WebRequest $nugetDistUrl -OutFile $localNugetExe
 }
 
-$versionStr = (Get-Content $packageVersionFile)
+$packageVersionFile = Join-Path $packageRoot ".pack-version"
+$packageVersion = (Get-Content $packageVersionFile)
+$packageNames = @("Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64",
+    "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore.win-arm64",
+    "Microsoft.ChakraCore", "Microsoft.ChakraCore.vc140")
 
 foreach ($packageName in $packageNames) {
     # Create primary and “symbol” packages.
-    Create-NuGetPackage $packageName $versionStr
-    Create-NuGetPackage $packageName $versionStr -Symbols
+    CreateNugetPackage $packageName $packageVersion
+    CreateNugetPackage $packageName $packageVersion -symbols
 }
