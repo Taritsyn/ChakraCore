@@ -17,8 +17,8 @@
     <tags>Chakra,ChakraCore,javascript,js,ecmascript,compiler,platform,oss,opensource,native</tags>
   </metadata>
   <files>
-    <file src="../../../out/Release/libChakraCore.dylib" target="runtimes/osx-x64/native/libChakraCore.dylib" />
+    <file src="../../../out/Release/libChakraCore.dylib" target="runtimes/osx-x64/native" />
 
-    <file src="../../../LICENSE.txt" target="LICENSE.txt" />
+    <file src="../../../LICENSE.txt" target="" />
   </files>
 </package>

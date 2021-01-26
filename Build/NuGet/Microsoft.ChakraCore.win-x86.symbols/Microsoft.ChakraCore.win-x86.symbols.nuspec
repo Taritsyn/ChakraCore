@@ -21,8 +21,8 @@
     <file src="Install.ps1" target="tools" />
     <file src="Uninstall.ps1" target="tools" />
 
-    <file src="../../VcBuild/bin/x86_release/ChakraCore.pdb" target="runtimes/win-x86/native/ChakraCore.pdb" />
+    <file src="../../VcBuild/bin/x86_release/ChakraCore.pdb" target="runtimes/win-x86/native" />
 
-    <file src="../../../LICENSE.txt" target="LICENSE.txt" />
+    <file src="../../../LICENSE.txt" target="" />
   </files>
 </package>
