@@ -8,6 +8,32 @@ PACKAGE_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PACKAGE_ARTIFACTS_DIR="$PACKAGE_ROOT/Artifacts"
 LOCAL_NUGET_EXE="$PACKAGE_ROOT/nuget.exe"
 
+# helper to download file with retry
+DOWNLOAD_FILE_WITH_RETRY() {
+    SOURCE_URL=$1
+    DEST_FILE=$2
+    RETRIES=$3
+    DELAY_TIME_IN_SECONDS=5
+
+    until (wget -O $DEST_FILE $SOURCE_URL 2>/dev/null || curl -o $DEST_FILE --location $SOURCE_URL 2>/dev/null)
+    do
+        echo "Failed to download $SOURCE_URL"
+
+        if [ "$RETRIES" -gt 0 ]; then
+            RETRIES=$((RETRIES - 1))
+
+            echo "Waiting $DELAY_TIME_IN_SECONDS seconds before retrying. Retries left: $RETRIES"
+            sleep $DELAY_TIME_IN_SECONDS
+        else
+            if [ -f "$DEST_FILE" ]; then
+                rm "$DEST_FILE"
+            fi
+
+            exit 1
+        fi
+    done
+}
+
 if [ -d "$PACKAGE_ARTIFACTS_DIR" ]; then
     # Delete any existing output.
     rm "$PACKAGE_ARTIFACTS_DIR/*.nupkg"
@@ -17,8 +43,7 @@ if [ ! -f "$LOCAL_NUGET_EXE" ]; then
     NUGET_DIST_URL="https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
 
     echo "NuGet.exe not found - downloading latest from $NUGET_DIST_URL"
-
-    wget -O $LOCAL_NUGET_EXE $NUGET_DIST_URL || curl -o $LOCAL_NUGET_EXE --location $NUGET_DIST_URL
+    DOWNLOAD_FILE_WITH_RETRY $NUGET_DIST_URL $LOCAL_NUGET_EXE 3
 fi
 
 PACKAGE_VERSION_FILE="$PACKAGE_ROOT/.pack-version"
