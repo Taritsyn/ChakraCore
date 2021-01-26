@@ -23,6 +23,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="../../../LICENSE.txt" target="LICENSE.txt" />
+    <file src="../../../LICENSE.txt" target="" />
   </files>
 </package>
