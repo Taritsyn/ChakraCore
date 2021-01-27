@@ -40,8 +40,13 @@ function CreateNugetPackage ([string]$name, [string]$version, [switch]$symbols) 
 
     if (Test-Path $packageDir) {
         $packageNuspecFile = Join-Path $packageDir "$packageName.nuspec"
+        $command = ("$localNugetExe pack $packageNuspecFile -OutputDirectory $packageArtifactsDir " +
+            "-Properties version=$version")
+        if (!$IsWindows) {
+            $command = "mono $command"
+        }
 
-        & $localNugetExe pack $packageNuspecFile -OutputDirectory $packageArtifactsDir -Properties version=$version
+        Invoke-Expression $command
     }
 }
 
@@ -59,9 +64,18 @@ if (!(Test-Path $localNugetExe)) {
 
 $packageVersionFile = Join-Path $packageRoot ".pack-version"
 $packageVersion = (Get-Content $packageVersionFile)
-$packageNames = @("Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64",
-    "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore.win-arm64",
-    "Microsoft.ChakraCore", "Microsoft.ChakraCore.vc140")
+$packageNames = @()
+if ($IsWindows) {
+    $packageNames = @("Microsoft.ChakraCore.win-x86", "Microsoft.ChakraCore.win-x64",
+        "Microsoft.ChakraCore.win-arm", "Microsoft.ChakraCore.win-arm64",
+        "Microsoft.ChakraCore", "Microsoft.ChakraCore.vc140")
+}
+elseif ($IsLinux) {
+    $packageNames = @("Microsoft.ChakraCore.linux-x64")
+}
+elseif ($IsMacOS) {
+    $packageNames = @("Microsoft.ChakraCore.osx-x64")
+}
 
 foreach ($packageName in $packageNames) {
     # Create primary and “symbol” packages.
